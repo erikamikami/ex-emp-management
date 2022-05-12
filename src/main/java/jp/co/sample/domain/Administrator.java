@@ -1,9 +1,23 @@
 package jp.co.sample.domain;
 
+/**
+ * 管理者情報を表すドメイン.
+ * 
+ * @author erika
+ *
+ */
 public class Administrator {
+
+	/** ID（主キー） */
 	private Integer id;
+
+	/** 名前 */
 	private String name;
+
+	/** メールアドレス */
 	private String mailAddress;
+
+	/** パスワード */
 	private String password;
 
 	public Administrator(Integer id, String name, String mailAddress, String password) {
