@@ -1,5 +1,6 @@
 package jp.co.sample.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,20 @@ public class AdministratorController {
 	@RequestMapping("/toInsert")
 	public String toInsert() {
 		return "administrator/insert";
+	}
+
+	/**
+	 * 管理者情報を登録する. その後ログイン画面にリダイレクトする
+	 * 
+	 * @param insertAdministratorForm
+	 * @return String
+	 */
+	@RequestMapping("/insert")
+	public String insert(InsertAdministratorForm insertAdministratorForm) {
+		Administrator administrator = new Administrator();
+		BeanUtils.copyProperties(insertAdministratorForm, administrator);
+		service.insert(administrator);
+		return "redirect:/";
 	}
 
 }
