@@ -60,7 +60,7 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/")
 	public String toLogin() {
-		return "administrator/login";
+		return "/administrator/login";
 	}
 
 	/**
