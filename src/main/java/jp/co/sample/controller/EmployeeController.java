@@ -52,4 +52,32 @@ public class EmployeeController {
 		return "/employee/detail";
 	}
 
+	/**
+	 * 従業員情報の扶養人数のみ更新する.
+	 *  ①. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
+	 *  ②. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
+	 *  ③. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
+	 *  ④. 従業員一覧にリダイレクトさせる
+	 * @param form
+	 * @return String
+	 */
+	@RequestMapping("/update")
+	public String update(UpdateEmployeeForm form) {
+		String id = form.getId();
+		Integer integerId = Integer.parseInt(id);
+		Employee employee = employeeService.showDetail(integerId);
+
+		String dependentsCount = form.getDependentsCount();
+		Integer integerDependentsCount = Integer.parseInt(dependentsCount);
+
+		System.out.println("integerDependentsCountは、" + integerDependentsCount);
+
+		employee.setDependentsCount(integerDependentsCount);
+
+		employeeService.update(employee);
+
+		return "redirect:/employee/showList";
+	}
+
 }
+

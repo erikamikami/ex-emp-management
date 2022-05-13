@@ -85,8 +85,7 @@ public class EmployeeRepository {
 				+ ",telephone=:telephone"
 				+ ",salary=:salary"
 				+ ",characteristics=:characteristics"
-				+ ",dependents_count=:dependentsCount"
-				+ "WHERE id=:id";
+				+ ",dependents_count=:dependentsCount WHERE id=:id";
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
 		template.update(sql, param);
 	}
