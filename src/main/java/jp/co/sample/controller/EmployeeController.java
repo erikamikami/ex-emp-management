@@ -56,10 +56,11 @@ public class EmployeeController {
 
 	/**
 	 * 従業員情報の扶養人数のみ更新する.
-	 *  ①. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
-	 *  ②. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
-	 *  ③. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
-	 *  ④. 従業員一覧にリダイレクトさせる
+	 *  ①. バリデーションチェック
+	 *  ②. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
+	 *  ③. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
+	 *  ④. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
+	 *  ⑤. 従業員一覧にリダイレクトさせる
 	 * @param form
 	 * @return String
 	 */
@@ -78,8 +79,6 @@ public class EmployeeController {
 
 		String dependentsCount = form.getDependentsCount();
 		Integer integerDependentsCount = Integer.parseInt(dependentsCount);
-
-		System.out.println("integerDependentsCountは、" + integerDependentsCount);
 
 		employee.setDependentsCount(integerDependentsCount);
 
