@@ -2,10 +2,10 @@ package jp.co.sample.form;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+@SuppressWarnings("deprecation")
 public class InsertAdministratorForm {
 	/** 名前 */
 	@NotBlank(message = "※氏名は必須です")
@@ -18,8 +18,7 @@ public class InsertAdministratorForm {
 
 	/** パスワード */
 	@NotBlank(message = "※パスワードは必須です")
-	@Pattern(regexp = "/^[a-zA-Z0-9]+$/", message = "※パスワードは半角英数字で入力ください")
-	@Size(min = 8, message = "※パスワードは8文字以上で設定してください")
+	@Pattern(regexp = "^([a-zA-Z0-9]{8,})$", message = "※8文字以上の半角英数字で登録してください")
 	private String password;
 
 	@Override
