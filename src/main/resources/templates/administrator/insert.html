@@ -55,6 +55,7 @@
                   <div class="col-sm-12">
                     <label for="mailAddress"> メールアドレス: </label> 
                       <div class="error-messages" th:errors="*{mailAddress}"></div>
+                      <div class="error-messages" th:text="${alreadyExistMails}"></div>
                       <input type="text" name="mailAddress" id="mailAddress"
                       class="form-control" placeholder="yamada@mail.com" th:field="*{mailAddress}">
                   </div>

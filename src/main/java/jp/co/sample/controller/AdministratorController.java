@@ -42,20 +42,28 @@ public class AdministratorController {
 	}
 
 	/**
-	 * 管理者情報を登録する. その後ログイン画面にリダイレクトする
+	 * 管理者情報を登録する. 
+	 * すでに登録されているメールアドレスだった場合は、エラー表示
+	 * その後ログイン画面にリダイレクトする
 	 * 
 	 * @param insertAdministratorForm
 	 * @return String
 	 */
 	@RequestMapping("/insert")
-	public String insert(@Validated InsertAdministratorForm insertAdministratorForm, BindingResult result) {
+	public String insert(@Validated InsertAdministratorForm insertAdministratorForm, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "administrator/insert";
 		}
+		
 		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(insertAdministratorForm, administrator);
-		service.insert(administrator);
-		return "redirect:/";
+		try {
+			service.insert(administrator);
+			return "redirect:/";
+		} catch (Exception e) {
+			model.addAttribute("alreadyExistMails", "※このメールアドレスは既に登録されています");
+			return "administrator/insert";
+		}
 	}
 
 	/**
