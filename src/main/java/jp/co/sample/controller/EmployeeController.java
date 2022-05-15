@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,12 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private HttpSession session;
+
+	@Autowired
+	private AdministratorController administratorController;
+
 	@ModelAttribute
 	private UpdateEmployeeForm setUpUpdateEmployeeForm() {
 		return new UpdateEmployeeForm();
@@ -38,6 +46,9 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showList")
 	public String showList(Model model) {
+		if (session.getAttribute("administratorName") == null) {
+			return "administrator/login";
+		}
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
 		return "/employee/list";
@@ -52,6 +63,9 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showDetail")
 	public String showDertail(String id, Model model) {
+		if (session.getAttribute("administratorName") == null) {
+			return "administrator/login";
+		}
 		Integer integerId = Integer.parseInt(id);
 		Employee employee = employeeService.showDetail(integerId);
 		model.addAttribute("employee", employee);
@@ -59,12 +73,11 @@ public class EmployeeController {
 	}
 
 	/**
-	 * 従業員情報の扶養人数のみ更新する.
+	 * 従業員情報を更新する.
 	 *  ①. バリデーションチェック
-	 *  ②. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
-	 *  ③. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
-	 *  ④. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
-	 *  ⑤. 従業員一覧にリダイレクトさせる
+	 *  ②. idをもとに、その従業員情報を確保する
+	 *  ③. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
+	 *  ④. 従業員一覧にリダイレクトさせる
 	 * @param form
 	 * @return String
 	 */
