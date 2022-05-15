@@ -45,7 +45,7 @@
                   <div class="col-sm-12">
                     <label for="name"> 氏名: </label>
                      <div class="error-messages" th:errors="*{name}"></div> <input type="text" name="name" id="name"
-                      class="form-control" placeholder="山田太郎">
+                      class="form-control" placeholder="山田太郎" th:field="*{name}">
                   </div>
                 </div>
               </div>
