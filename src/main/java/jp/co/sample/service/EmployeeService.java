@@ -56,7 +56,7 @@ public class EmployeeService {
 	 * @param dependentsCount
 	 * @return List<Employee>
 	 */
-	public List<Employee> search(String name, String hireDateFrom, String hireDateTo, String dependentsCount) {
+	public List<Employee> search(String name, String hireDateFrom, String hireDateTo, Integer dependentsCount) {
 		List<Employee> employees = new ArrayList<>();
 
 		// 検索値がすべてブランクだった場合は全件検索する

@@ -1,7 +1,11 @@
 package jp.co.sample.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.sample.domain.Employee;
+import jp.co.sample.domain.SearchEmployee;
 import jp.co.sample.form.SearchEmployeeForm;
 import jp.co.sample.form.UpdateEmployeeForm;
 import jp.co.sample.service.EmployeeService;
@@ -100,8 +105,31 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping("/serch")
-	public String serch(SearchEmployeeForm searchEmployeeForm) {
+	public String serch(SearchEmployeeForm searchEmployeeForm, Model model) {
+		// あいまい検索するnameを取得する
+		String name = searchEmployeeForm.getName();
 
+		// hireDateFrom と hireDateTo を、String型からDate型に変換
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String stringHireDateFrom = searchEmployeeForm.getHireDateFrom();
+		String stringHireDateTo = searchEmployeeForm.getHireDateTo();
+
+		try {
+			Date hireDateFrom = sdFormat.parse(stringHireDateFrom);
+			Date hireDateTo = sdFormat.parse(stringHireDateTo);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("serchHireDateErrorMessage", "※「yyyy-MM-dd」の形式で入力ください。");
+			return "/employee/list";
+		}
+
+		// 扶養人数（dependentsCount）をString型からInteger型に変換
+		Integer dependentsCount = Integer.parseInt(searchEmployeeForm.getDependentsCount());
+
+		List<Employee> searchResultsEmployees = employeeService.search(name, stringHireDateFrom, stringHireDateTo,
+				dependentsCount);
+		model.addAttribute("searchResultsEmployees", searchResultsEmployees);
+		return "/employee/list";
 	}
 
 }

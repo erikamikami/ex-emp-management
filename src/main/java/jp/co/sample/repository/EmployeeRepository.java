@@ -88,7 +88,7 @@ public class EmployeeRepository {
 	 * @param dependentsCount
 	 * @return List<Employee>
 	 */
-	public List<Employee> search(String name, String hireDateFrom, String hireDateTo, String dependentsCount) {
+	public List<Employee> search(String name, String hireDateFrom, String hireDateTo, Integer dependentsCount) {
 		// StringBuilderでSQL文を連結する
 		String sql = new String();
 		sql.concat(
