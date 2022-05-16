@@ -1,11 +1,8 @@
 package jp.co.sample.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.sample.domain.Employee;
-import jp.co.sample.domain.SearchEmployee;
 import jp.co.sample.form.SearchEmployeeForm;
 import jp.co.sample.form.UpdateEmployeeForm;
 import jp.co.sample.service.EmployeeService;
@@ -66,12 +62,10 @@ public class EmployeeController {
 	}
 
 	/**
-	 * 従業員情報の扶養人数のみ更新する.
-	 *  ①. バリデーションチェック
-	 *  ②. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
-	 *  ③. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
-	 *  ④. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
-	 *  ⑤. 従業員一覧にリダイレクトさせる
+	 * 従業員情報の扶養人数のみ更新する. ①. バリデーションチェック ②. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する ③.
+	 * リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする ④.
+	 * EmployeeServiceクラスのupdateメソッドで、更新をおこなう ⑤. 従業員一覧にリダイレクトさせる
+	 * 
 	 * @param form
 	 * @return String
 	 */
@@ -109,28 +103,39 @@ public class EmployeeController {
 		// あいまい検索するnameを取得する
 		String name = searchEmployeeForm.getName();
 
-		// hireDateFrom と hireDateTo を、String型からDate型に変換
-		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String stringHireDateFrom = searchEmployeeForm.getHireDateFrom();
-		String stringHireDateTo = searchEmployeeForm.getHireDateTo();
+		// 扶養人数（dependentsCount）をString型からInteger型に変換
+		Integer dependentsCount = null;
+		if (!(searchEmployeeForm.getDependentsCount().equals(""))) {
+			dependentsCount = Integer.parseInt(searchEmployeeForm.getDependentsCount());
+		}
+
+		// hireDateFrom と hireDateTo を、String型からjava.sql.Date型に変換
+		Date hireDateFrom = null;
+		Date hireDateTo = null;
 
 		try {
-			Date hireDateFrom = sdFormat.parse(stringHireDateFrom);
-			Date hireDateTo = sdFormat.parse(stringHireDateTo);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			model.addAttribute("serchHireDateErrorMessage", "※「yyyy-MM-dd」の形式で入力ください。");
+			hireDateFrom = Date.valueOf(searchEmployeeForm.getHireDateFrom());
+		} catch (IllegalArgumentException e) {
+			hireDateFrom = Date.valueOf("1900-01-01"); // 検索フォームからのパラメータが空でもnullで扱いたくないため、1900年1月1日をセットする（1900年1月1日以前に入社している人は存在しないため）
+		}
+
+		try {
+			hireDateTo = Date.valueOf(searchEmployeeForm.getHireDateTo());
+		} catch (IllegalArgumentException e) {
+			hireDateTo = Date.valueOf("9999-12-30"); // 検索フォームからのパラメータが空でもnullで扱いたくないため、9999年12月30日をセットする（9999年12月30日以降まで入社している人はおそらくこれからも存在しないため）
+		}
+
+		List<Employee> searchResultsEmployees = employeeService.search(name, hireDateFrom, hireDateTo, dependentsCount);
+		model.addAttribute("searchResultsEmployees", searchResultsEmployees);
+
+		// 検索結果が0だった場合、その旨表示
+		if (searchResultsEmployees.size() == 0) {
+			model.addAttribute("searchResults", "※検索結果は0です");
 			return "/employee/list";
 		}
 
-		// 扶養人数（dependentsCount）をString型からInteger型に変換
-		Integer dependentsCount = Integer.parseInt(searchEmployeeForm.getDependentsCount());
-
-		List<Employee> searchResultsEmployees = employeeService.search(name, stringHireDateFrom, stringHireDateTo,
-				dependentsCount);
-		model.addAttribute("searchResultsEmployees", searchResultsEmployees);
 		return "/employee/list";
+
 	}
 
 }
-

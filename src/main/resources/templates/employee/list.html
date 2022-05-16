@@ -59,7 +59,7 @@
     
     <!-- 従業員検索フォーム -->
     <div class="table-responsive col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
-    <form class="employeeserchform" th:action="@{/employee/serch}" th:object="${searchEmployeeForm}">
+    <form class="employeeserchform" th:action="@{/employee/serch}" th:object="${searchEmployeeForm}" method="post">
     <div class="employeeserchformelement">
       氏名：<input type="text" th:name="*{name}" th:field="*{name}"><br>
     </div>
@@ -104,9 +104,24 @@
               </tr>
             </tbody>
           </div>
+          
+          <div th:each="searchResultsEmployee : ${searchResultsEmployees}">
+            <tbody>
+              <tr>
+                <td><a
+                  th:href="@{/employee/showDetail?id=} + ${searchResultsEmployee.id}"> <span
+                    th:text="${searchResultsEmployee.name}">山田太郎</span>
+                </a></td>
+                <td><span th:text="${searchResultsEmployee.hireDate}">2016/12/1</span></td>
+                <td><span th:text="${searchResultsEmployee.dependentsCount} + '人'">3人</span>
+                </td>
+              </tr>
+            </tbody>
+          </div>
 
         </table>
-
+        
+        <p th:text="${searchResults}">検索結果は0です</p>
 
         <!-- ここから下を編集する必要はありません -->
 

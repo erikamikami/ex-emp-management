@@ -1,5 +1,6 @@
 package jp.co.sample.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +57,11 @@ public class EmployeeService {
 	 * @param dependentsCount
 	 * @return List<Employee>
 	 */
-	public List<Employee> search(String name, String hireDateFrom, String hireDateTo, Integer dependentsCount) {
+	public List<Employee> search(String name, Date hireDateFrom, Date hireDateTo, Integer dependentsCount) {
 		List<Employee> employees = new ArrayList<>();
 
 		// 検索値がすべてブランクだった場合は全件検索する
-		if ("".equals(name) && "".equals(hireDateFrom) && "".equals(hireDateTo)) {
+		if ("".equals(name) && "".equals(hireDateFrom) && "".equals(hireDateTo) && "".equals(dependentsCount)) {
 			employees = employeeRepository.findAll();
 		} else {
 			// 上記以外の場合、EmployeeRepositoryのsearchメソッドを呼び出す
