@@ -1,7 +1,8 @@
 package jp.co.sample.repository;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.sample.domain.Employee;
 
-/**
- * @author erika
- *
- */
 @Repository
 public class EmployeeRepository {
 
@@ -67,26 +64,79 @@ public class EmployeeRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		return template.queryForObject(sql, param, EMPLOYEE_ROW_MAPPER);
 	}
-	
+
 	/**
-	 * 従業員情報を変更する.
-	 * idカラムを除いた従業員情報全てのカラムを更新する
+	 * 従業員情報を変更する. idカラムを除いた従業員情報全てのカラムを更新する
+	 * 
 	 * @param employee
 	 */
 	public void update(Employee employee) {
-		String sql = "UPDATE employees SET "
-				+ "name=:name"
-				+ ",image=:image"
-				+ ",gender=:gender"
-				+ ",hire_date=:hireDate"
-				+ ",mail_address=:mailAddress"
-				+ ",zip_code=:zipCode"
-				+ ",address=:address"
-				+ ",telephone=:telephone"
-				+ ",salary=:salary"
-				+ ",characteristics=:characteristics"
+		String sql = "UPDATE employees SET " + "name=:name" + ",image=:image" + ",gender=:gender"
+				+ ",hire_date=:hireDate" + ",mail_address=:mailAddress" + ",zip_code=:zipCode" + ",address=:address"
+				+ ",telephone=:telephone" + ",salary=:salary" + ",characteristics=:characteristics"
 				+ ",dependents_count=:dependentsCount WHERE id=:id";
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
 		template.update(sql, param);
 	}
+
+	/**
+	 * 従業員一覧に検索フォームを追加 ＜仕様＞ 名前のあいまい検索 入社日 開始日～終了日（期間で検索） 扶養人数 〇人以上 で検索
+	 * 
+	 * @param name
+	 * @param hireDateFrom
+	 * @param hireDateTo
+	 * @param dependentsCount
+	 * @return List<Employee>
+	 */
+	public List<Employee> search(String name, String hireDateFrom, String hireDateTo, String dependentsCount) {
+		// StringBuilderでSQL文を連結する
+		String sql = new String();
+		sql.concat(
+				"SELECT name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count FROM employees WHERE ");
+
+		// ブランクかどうか判断するためのフラグ
+		boolean nameFlg = false;
+		boolean hireDateFromFlg = false;
+		boolean hireDateToFlg = false;
+		boolean dependentsCountFlg = false;
+		boolean andFlg = false;
+
+		SqlParameterSource param;
+
+		// nameがブランクではなかった場合、sql変数にconcatする
+		// フラグをtrueに変更
+		if (!"".equals(name)) {
+			sql.concat("name LIKE :name");
+			nameFlg = true;
+			andFlg = true;
+			param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		}
+
+		// hireDateFromがブランクではなかった場合、sql変数にconcatする
+		// フラグをtrueに変更
+		if (!"".equals(hireDateFrom)) {
+			if (andFlg)
+				sql.concat(" AND ");
+			sql.concat("hire_date > :hireDateFrom");
+			hireDateFromFlg = true;
+			andFlg = true;
+			param = new MapSqlParameterSource().addValue("hireDateFrom", hireDateFrom);
+		}
+
+		// hireDateToがブランクではなかった場合、sql変数にconcatする
+		// フラグをtrueに変更
+		if (!"".equals(hireDateTo)) {
+			if (andFlg)
+				sql.concat(" AND ");
+			sql.concat("hire_date < :hireDateTo");
+			hireDateToFlg = true;
+			andFlg = true;
+			param = new MapSqlParameterSource().addValue("hireDateTo", hireDateTo);
+		}
+
+		List<Employee> employees = template.query(sql, EMPLOYEE_ROW_MAPPER);
+		return employees;
+
+	}
+
 }
