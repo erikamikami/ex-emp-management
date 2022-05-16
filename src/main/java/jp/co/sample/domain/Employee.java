@@ -3,7 +3,7 @@ package jp.co.sample.domain;
 import java.util.Date;
 
 /**
- * 従業員情報を表すドメイン.
+ * 従業員情報を表すドメインクラス.
  * 
  * @author erika
  */
@@ -22,7 +22,7 @@ public class Employee {
 	private String gender;
 
 	/** 入社日 */
-	private java.util.Date hireDate;
+	private Date hireDate;
 
 	/** メールアドレス */
 	private String mailAddress;
