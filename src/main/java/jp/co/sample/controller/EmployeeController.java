@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.sample.domain.Employee;
+import jp.co.sample.form.SearchEmployeeForm;
 import jp.co.sample.form.UpdateEmployeeForm;
 import jp.co.sample.service.EmployeeService;
 
@@ -26,6 +27,11 @@ public class EmployeeController {
 		return new UpdateEmployeeForm();
 	}
 
+	@ModelAttribute
+	private SearchEmployeeForm setUpSearchEmployeeForm() {
+		return new SearchEmployeeForm();
+	}
+
 	/**
 	 * 従業員一覧の表示
 	 * 
@@ -33,7 +39,7 @@ public class EmployeeController {
 	 * @return String
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model) {
+	public String showList(Model model, SearchEmployeeForm serchEmployeeForm) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
 		return "/employee/list";
@@ -85,6 +91,17 @@ public class EmployeeController {
 		employeeService.update(employee);
 
 		return "redirect:/employee/showList";
+	}
+
+	/**
+	 * 従業員の検索
+	 * 
+	 * @param searchEmployeeForm
+	 * @return
+	 */
+	@RequestMapping("/serch")
+	public String serch(SearchEmployeeForm searchEmployeeForm) {
+
 	}
 
 }

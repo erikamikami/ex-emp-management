@@ -56,6 +56,23 @@
       <li class="active"><a href="list.html"
         th:href="@{/employee/showList}">従業員リスト</a></li>
     </ol>
+    
+    <!-- 従業員検索フォーム -->
+    <div class="table-responsive col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
+    <form class="employeeserchform" th:action="@{/employee/serch}" th:object="${searchEmployeeForm}">
+    <div class="employeeserchformelement">
+      氏名：<input type="text" th:name="*{name}" th:field="*{name}"><br>
+    </div>
+    <div class="employeeserchformelement">
+      入社日：<input type="text" th:name="*{hireDateFrom}" th:field="*{hireDateFrom}" placeholder="開始日">
+      &#126; <input type="text" th:name="*{hireDateTo}" th:field="*{hireDateTo}" placeholder="終了日"><br>
+    </div>
+    <div class="employeeserchformelement">
+      扶養人数：<input type="text" th:name="*{dependentsCount}" th:field="*{dependentsCount}">人以上<br>
+    </div>
+      <button class="employeeserchformbutton">検索</button>
+    </form>
+    </div>
 
     <!-- table -->
     <div class="row">
