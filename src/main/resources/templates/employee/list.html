@@ -42,8 +42,8 @@
           </ul>
           <p class="navbar-text navbar-right">
             <span th:text="${session.administratorName + 'さん'}">山田さん</span>こんにちは！
-            &nbsp;&nbsp;&nbsp; <a href="../administrator/login.html" th:href="@{/logout}"
-              class="navbar-link">ログアウト</a>
+            &nbsp;&nbsp;&nbsp; <a href="../administrator/login.html"
+              th:href="@{/logout}" class="navbar-link">ログアウト</a>
           </p>
         </div>
         <!-- /.navbar-collapse -->
@@ -56,22 +56,28 @@
       <li class="active"><a href="list.html"
         th:href="@{/employee/showList}">従業員リスト</a></li>
     </ol>
-    
+
     <!-- 従業員検索フォーム -->
-    <div class="table-responsive col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
-    <form class="employeeserchform" th:action="@{/employee/serch}" th:object="${searchEmployeeForm}" method="post">
-    <div class="employeeserchformelement">
-      氏名：<input type="text" th:name="*{name}" th:field="*{name}"><br>
-    </div>
-    <div class="employeeserchformelement">
-      入社日：<input type="text" th:name="*{hireDateFrom}" th:field="*{hireDateFrom}" placeholder="開始日">
-      &#126; <input type="text" th:name="*{hireDateTo}" th:field="*{hireDateTo}" placeholder="終了日"><br>
-    </div>
-    <div class="employeeserchformelement">
-      扶養人数：<input type="text" th:name="*{dependentsCount}" th:field="*{dependentsCount}">人以上<br>
-    </div>
-      <button class="employeeserchformbutton">検索</button>
-    </form>
+    <div
+      class="table-responsive col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
+      <form class="employeeserchform" th:action="@{/employee/serch}"
+        th:object="${searchEmployeeForm}" method="post">
+        <div class="employeeserchformelement">
+          氏名：<input type="text" th:name="*{name}" th:field="*{name}"><br>
+        </div>
+        <div class="employeeserchformelement">
+          <span class="attention">※「YYYY-MM-DD」の形式で入力ください。（例）2007年4月1日で検索する場合：2007-04-01</span><br>
+          入社日：<input type="text" th:name="*{hireDateFrom}"
+            th:field="*{hireDateFrom}" placeholder="開始日"> &#126; <input
+            type="text" th:name="*{hireDateTo}" th:field="*{hireDateTo}"
+            placeholder="終了日"><br>
+        </div>
+        <div class="employeeserchformelement">
+          扶養人数：<input type="text" th:name="*{dependentsCount}"
+            th:field="*{dependentsCount}">人以上<br>
+        </div>
+        <button class="employeeserchformbutton">検索</button>
+      </form>
     </div>
 
     <!-- table -->
@@ -104,23 +110,24 @@
               </tr>
             </tbody>
           </div>
-          
+
           <div th:each="searchResultsEmployee : ${searchResultsEmployees}">
             <tbody>
               <tr>
                 <td><a
-                  th:href="@{/employee/showDetail?id=} + ${searchResultsEmployee.id}"> <span
-                    th:text="${searchResultsEmployee.name}">山田太郎</span>
+                  th:href="@{/employee/showDetail?id=} + ${searchResultsEmployee.id}">
+                    <span th:text="${searchResultsEmployee.name}">山田太郎</span>
                 </a></td>
                 <td><span th:text="${searchResultsEmployee.hireDate}">2016/12/1</span></td>
-                <td><span th:text="${searchResultsEmployee.dependentsCount} + '人'">3人</span>
+                <td><span
+                  th:text="${searchResultsEmployee.dependentsCount} + '人'">3人</span>
                 </td>
               </tr>
             </tbody>
           </div>
 
         </table>
-        
+
         <p th:text="${searchResults}">検索結果は0です</p>
 
         <!-- ここから下を編集する必要はありません -->
