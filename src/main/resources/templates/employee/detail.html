@@ -19,20 +19,9 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed"
-            data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
-            aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span> <span
-              class="icon-bar"></span> <span class="icon-bar"></span> <span
-              class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="list.html"
-            th:href="@{/employee/showList}"> <!-- 企業ロゴ --> <img
-            src="../../static/img/header_logo_small.png"
-            th:src="@{/img/header_logo_small.png}">
-          </a>
-        </div>
+        
+        <!-- headerのインクルード -->
+        <header th:insert="/common/header::frag_employee-header"></header>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse"
@@ -42,8 +31,8 @@
           </ul>
           <p class="navbar-text navbar-right">
             <span th:text="${session.administratorName + 'さん'}">山田さん</span>こんにちは！
-            &nbsp;&nbsp;&nbsp; <a href="../administrator/login.html" th:href="@{/logout}"
-              class="navbar-link">ログアウト</a>
+            &nbsp;&nbsp;&nbsp; <a href="../administrator/login.html"
+              th:href="@{/logout}" class="navbar-link">ログアウト</a>
           </p>
         </div>
         <!-- /.navbar-collapse -->
@@ -68,7 +57,8 @@
           <!-- ここから上を編集する必要はありません -->
 
           <!-- ここにモックのform要素を貼り付けます -->
-          <form method="post" action="list.html" th:action="@{/employee/update}" th:object="${updateEmployeeForm}">
+          <form method="post" action="list.html"
+            th:action="@{/employee/update}" th:object="${updateEmployeeForm}">
             <fieldset>
               <legend>従業員情報</legend>
               <table class="table table-striped">

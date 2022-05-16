@@ -1,0 +1,25 @@
+<!-- headerのインクルード -->
+<header th:fragment="frag_employee-header">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed"
+      data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+      aria-expanded="false">
+      <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+      <span class="icon-bar"></span> <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="list.html"
+      th:href="@{/employee/showList}"> <img
+      src="../../static/img/header_logo_small.png"
+      th:src="@{/img/header_logo_small.png}">
+    </a>
+  </div>
+</header>
+
+<!-- header_logo.pngのインクルード -->
+<header th:fragment="frag_administrator-header">
+  <div class="row">
+      <div class="col-lg-offset-0 col-lg-6 col-md-8 col-sm-10 col-xs-12">
+        <img src="../../static/img/header_logo.png" th:src="@{/img/header_logo.png}">
+      </div>
+  </div>
+</header>
