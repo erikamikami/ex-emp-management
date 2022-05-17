@@ -12,7 +12,7 @@ import jp.co.sample.repository.AdministratorRepository;
 public class AdministratorService {
 
 	@Autowired
-	private AdministratorRepository repository;
+	private AdministratorRepository administratorRepository;
 
 	/**
 	 * 管理者情報を挿入する.
@@ -20,7 +20,7 @@ public class AdministratorService {
 	 * @param administrator
 	 */
 	public void insert(Administrator administrator) {
-		repository.insert(administrator);
+		administratorRepository.insert(administrator);
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class AdministratorService {
 	 * @return Administrator
 	 */
 	public Administrator login(String mailAddress, String password) {
-		return repository.findByMailAddressAndPassword(mailAddress, password);
+		return administratorRepository.findByMailAddressAndPassword(mailAddress, password);
 	}
 
 }
