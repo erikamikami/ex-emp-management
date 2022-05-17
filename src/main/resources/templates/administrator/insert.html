@@ -17,12 +17,10 @@
 <body>
   <div class="container">
     <!-- 上余白 -->
-    <div class="row">
-      <div class="col-lg-offset-0 col-lg-6 col-md-8 col-sm-10 col-xs-12">
-        <img src="../../static/img/header_logo.png"
-          th:src="@{/img/header_logo.png}">
-      </div>
-    </div>
+    
+    <!-- header_logo.pngのインクルード -->
+    <header th:insert="/common/header::frag_administrator-header"></header>
+    
     <!-- login form -->
     <div class="row">
       <div
