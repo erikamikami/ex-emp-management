@@ -100,7 +100,7 @@ public class EmployeeRepository {
 		boolean dependentsCountFlg = false;
 		boolean andFlg = false;
 
-		SqlParameterSource param = new MapSqlParameterSource();
+		MapSqlParameterSource param = new MapSqlParameterSource();
 
 		// nameがブランクではなかった場合、sql変数にappendする
 		// フラグをtrueに変更
@@ -108,7 +108,7 @@ public class EmployeeRepository {
 			sql.append("name LIKE :name");
 			nameFlg = true;
 			andFlg = true;
-			((MapSqlParameterSource) param).addValue("name", "%" + name + "%");
+			param.addValue("name", "%" + name + "%");
 		}
 
 		// hireDateFromを、sql変数にappendする
@@ -119,7 +119,7 @@ public class EmployeeRepository {
 			sql.append("hire_date >= :hireDateFrom");
 			hireDateFromFlg = true;
 			andFlg = true;
-			((MapSqlParameterSource) param).addValue("hireDateFrom", hireDateFrom);
+			param.addValue("hireDateFrom", hireDateFrom);
 
 
 			// hireDateToを、sql変数にappendする
@@ -130,7 +130,7 @@ public class EmployeeRepository {
 			sql.append("hire_date <= :hireDateTo");
 			hireDateToFlg = true;
 			andFlg = true;
-			((MapSqlParameterSource) param).addValue("hireDateTo", hireDateTo);
+			param.addValue("hireDateTo", hireDateTo);
 
 
 		// dependentsCountがブランクではなかった場合、sql変数にappendする
@@ -142,7 +142,7 @@ public class EmployeeRepository {
 			sql.append("dependents_count >= :dependentsCount");
 			dependentsCountFlg = true;
 			andFlg = true;
-			((MapSqlParameterSource) param).addValue("dependentsCount", dependentsCount);
+			param.addValue("dependentsCount", dependentsCount);
 		}
 
 		String stringSql = sql.toString();
