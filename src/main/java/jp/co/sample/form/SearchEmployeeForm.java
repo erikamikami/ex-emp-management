@@ -11,7 +11,7 @@ public class SearchEmployeeForm {
 	/** 入社日（終了日） */
 	private String hireDateTo;
 
-	/** 扶養人数（〇人以上） */
+	/** 扶養人数 */
 	private String dependentsCount;
 
 	@Override
