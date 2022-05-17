@@ -1,5 +1,7 @@
 package jp.co.sample.repository;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -9,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import jp.co.sample.domain.Administrator;
+
 
 /**
  * administratorsテーブルを操作するリポジトリ（Dao）
@@ -41,7 +44,7 @@ public class AdministratorRepository {
 	 * 
 	 * @return void
 	 */
-	public void insert(Administrator administrator) {
+	public void insert(Administrator administrator) throws SQLException {
 		String sql = "INSERT INTO administrators(name, mail_address, password) VALUES(:name, :mailAddress, :password)";
 		SqlParameterSource param = new BeanPropertySqlParameterSource(administrator);
 		template.update(sql, param);
@@ -64,4 +67,6 @@ public class AdministratorRepository {
 			return null;
 		}
 	}
+
 }
+
