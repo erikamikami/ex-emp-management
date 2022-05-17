@@ -79,8 +79,13 @@ public class EmployeeController {
 	}
 
 	/**
-	 * 従業員情報を更新する. ①. バリデーションチェック ②. idをもとに、その従業員情報を確保する ③.
-	 * EmployeeServiceクラスのupdateメソッドで、更新をおこなう ④. 従業員一覧にリダイレクトさせる
+	 * 従業員情報を更新する.
+	 * <ul>
+	 * <li>バリデーションチェック</li>
+	 * <li>idをもとに、その従業員情報を確保する</li>
+	 * <li>EmployeeServiceクラスのupdateメソッドで、更新をおこなう</li>
+	 * <li>従業員一覧にリダイレクトさせる</li>
+	 * </ul>
 	 * 
 	 * @param form
 	 * @return String
