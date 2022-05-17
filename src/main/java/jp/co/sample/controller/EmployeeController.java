@@ -1,6 +1,5 @@
 package jp.co.sample.controller;
 
-
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,11 +79,9 @@ public class EmployeeController {
 	}
 
 	/**
-	 * 従業員情報を更新する.
-	 *  ①. バリデーションチェック
-	 *  ②. idをもとに、その従業員情報を確保する
-	 *  ③. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
-	 *  ④. 従業員一覧にリダイレクトさせる
+	 * 従業員情報を更新する. ①. バリデーションチェック ②. idをもとに、その従業員情報を確保する ③.
+	 * EmployeeServiceクラスのupdateメソッドで、更新をおこなう ④. 従業員一覧にリダイレクトさせる
+	 * 
 	 * @param form
 	 * @return String
 	 */
@@ -109,7 +106,7 @@ public class EmployeeController {
 		employee.setId(integerId);
 
 		// hireDateを、String型からjava.util.Date型に変換
-    // インポートはjava.sql.Date. java.util.Dateを使う際は、FQCNで指定する
+		// インポートはjava.sql.Date. java.util.Dateを使う際は、FQCNで指定する
 		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String oldHireDate = form.getHireDate();
 		try {
