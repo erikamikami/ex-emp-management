@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -54,23 +56,29 @@ public class EmployeeController {
 
 	/**
 	 * 従業員情報の扶養人数のみ更新する.
-	 *  ①. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
-	 *  ②. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
-	 *  ③. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
-	 *  ④. 従業員一覧にリダイレクトさせる
+	 *  ①. バリデーションチェック
+	 *  ②. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
+	 *  ③. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
+	 *  ④. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
+	 *  ⑤. 従業員一覧にリダイレクトさせる
 	 * @param form
 	 * @return String
 	 */
 	@RequestMapping("/update")
-	public String update(UpdateEmployeeForm form) {
+	public String update(@Validated UpdateEmployeeForm form, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			String id = form.getId();
+			Integer integerId = Integer.parseInt(id);
+			Employee employee = employeeService.showDetail(integerId);
+			model.addAttribute("employee", employee);
+			return "/employee/detail";
+		}
 		String id = form.getId();
 		Integer integerId = Integer.parseInt(id);
 		Employee employee = employeeService.showDetail(integerId);
 
 		String dependentsCount = form.getDependentsCount();
 		Integer integerDependentsCount = Integer.parseInt(dependentsCount);
-
-		System.out.println("integerDependentsCountは、" + integerDependentsCount);
 
 		employee.setDependentsCount(integerDependentsCount);
 
