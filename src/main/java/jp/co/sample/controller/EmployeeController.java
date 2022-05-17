@@ -40,7 +40,7 @@ public class EmployeeController {
 	 * @return String
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model, SearchEmployeeForm serchEmployeeForm) {
+	public String showList(SearchEmployeeForm serchEmployeeForm, Model model) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
 		return "/employee/list";
