@@ -1,7 +1,13 @@
 package jp.co.sample.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +27,12 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private HttpSession session;
+
+	@Autowired
+	private AdministratorController administratorController;
+
 	@ModelAttribute
 	private UpdateEmployeeForm setUpUpdateEmployeeForm() {
 		return new UpdateEmployeeForm();
@@ -34,9 +46,12 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showList")
 	public String showList(Model model) {
+		if (session.getAttribute("administratorName") == null) {
+			return "administrator/login";
+		}
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
-		return "/employee/list";
+		return "employee/list";
 	}
 
 	/**
@@ -48,6 +63,9 @@ public class EmployeeController {
 	 */
 	@RequestMapping("/showDetail")
 	public String showDertail(String id, Model model) {
+		if (session.getAttribute("administratorName") == null) {
+			return "administrator/login";
+		}
 		Integer integerId = Integer.parseInt(id);
 		Employee employee = employeeService.showDetail(integerId);
 		model.addAttribute("employee", employee);
@@ -55,12 +73,11 @@ public class EmployeeController {
 	}
 
 	/**
-	 * 従業員情報の扶養人数のみ更新する.
+	 * 従業員情報を更新する.
 	 *  ①. バリデーションチェック
-	 *  ②. リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
-	 *  ③. リクエストパラメータから送られてきた正しい扶養人数の情報を、①にセットする
-	 *  ④. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
-	 *  ⑤. 従業員一覧にリダイレクトさせる
+	 *  ②. idをもとに、その従業員情報を確保する
+	 *  ③. EmployeeServiceクラスのupdateメソッドで、更新をおこなう
+	 *  ④. 従業員一覧にリダイレクトさせる
 	 * @param form
 	 * @return String
 	 */
@@ -73,14 +90,28 @@ public class EmployeeController {
 			model.addAttribute("employee", employee);
 			return "/employee/detail";
 		}
+
+		// リクエストパラメータから送られてきたidをもとに、その従業員情報を確保する
 		String id = form.getId();
 		Integer integerId = Integer.parseInt(id);
 		Employee employee = employeeService.showDetail(integerId);
 
-		String dependentsCount = form.getDependentsCount();
-		Integer integerDependentsCount = Integer.parseInt(dependentsCount);
+		BeanUtils.copyProperties(form, employee);
 
-		employee.setDependentsCount(integerDependentsCount);
+		// idを、String型からInteger型に変換
+		employee.setId(integerId);
+
+		// hireDateを、String型からjava.util.Date型に変換
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String oldHireDate = form.getHireDate();
+		try {
+			Date hireDate = sdFormat.parse(oldHireDate);
+			employee.setHireDate(hireDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			model.addAttribute("hireDateErrorMessage", "※「yyyy-MM-dd」の形式で入力ください。\n（例）2007年04月01日");
+			return "/employee/detail";
+		}
 
 		employeeService.update(employee);
 
