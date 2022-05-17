@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import jp.co.sample.domain.Administrator;
 
 /**
+ * administratorsテーブルを操作するリポジトリ（Dao）
+ * 
  * @author erika
  *
  */
@@ -53,7 +55,7 @@ public class AdministratorRepository {
 	 * @return Administrator
 	 */
 	public Administrator findByMailAddressAndPassword(String mailAddress, String password) {
-		String sql = "SELECT * FROM administrators WHERE mail_address=:mailAddress AND password=:password";
+		String sql = "SELECT id, name, mail_address, password FROM administrators WHERE mail_address=:mailAddress AND password=:password";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("mailAddress", mailAddress).addValue("password",
 				password);
 		try {
