@@ -91,57 +91,27 @@ public class EmployeeRepository {
 		// StringBuilderでSQL文を連結する
 		StringBuilder sql = new StringBuilder();
 		sql.append(
-				"SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count FROM employees WHERE ");
-
-		// ブランクかどうか判断するためのフラグ
-		boolean nameFlg = false;
-		boolean hireDateFromFlg = false;
-		boolean hireDateToFlg = false;
-		boolean dependentsCountFlg = false;
-		boolean andFlg = false;
+				"SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count FROM employees WHERE 1 = 1 ");
 
 		MapSqlParameterSource param = new MapSqlParameterSource();
 
 		// nameがブランクではなかった場合、sql変数にappendする
-		// フラグをtrueに変更
 		if (!"".equals(name)) {
-			sql.append("name LIKE :name");
-			nameFlg = true;
-			andFlg = true;
+			sql.append("AND name LIKE :name ");
 			param.addValue("name", "%" + name + "%");
 		}
 
 		// hireDateFromを、sql変数にappendする
-		// フラグをtrueに変更
-			if (andFlg) {
-				sql.append(" AND ");
-			}
-			sql.append("hire_date >= :hireDateFrom");
-			hireDateFromFlg = true;
-			andFlg = true;
-			param.addValue("hireDateFrom", hireDateFrom);
+		sql.append("AND hire_date >= :hireDateFrom ");
+		param.addValue("hireDateFrom", hireDateFrom);
 
-
-			// hireDateToを、sql変数にappendする
-		// フラグをtrueに変更
-			if (andFlg) {
-				sql.append(" AND ");
-			}
-			sql.append("hire_date <= :hireDateTo");
-			hireDateToFlg = true;
-			andFlg = true;
-			param.addValue("hireDateTo", hireDateTo);
-
+		// hireDateToを、sql変数にappendする
+		sql.append("AND hire_date <= :hireDateTo ");
+		param.addValue("hireDateTo", hireDateTo);
 
 		// dependentsCountがブランクではなかった場合、sql変数にappendする
-		// フラグをtrueに変更
 		if (dependentsCount != null) {
-			if (andFlg) {
-				sql.append(" AND ");
-			}
-			sql.append("dependents_count >= :dependentsCount");
-			dependentsCountFlg = true;
-			andFlg = true;
+			sql.append("AND dependents_count >= :dependentsCount ");
 			param.addValue("dependentsCount", dependentsCount);
 		}
 
