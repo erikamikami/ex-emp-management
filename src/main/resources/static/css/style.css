@@ -9,3 +9,24 @@
 .error-messages {
 	color: #ff0000;
 }
+
+/* auther mikami */
+
+.employeeserchformelement{
+	padding-bottom: 10px;
+}
+
+.employeeserchform{
+	padding-bottom: 15px;
+}
+
+.employeeserchformbutton{
+	float: right;
+	margin-right: 10px;
+}
+
+.attention{
+	color: #a0a0a0;
+	font-size: 13px;
+}
+
