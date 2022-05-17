@@ -34,7 +34,7 @@ public class EmployeeController {
 	public String showList(Model model) {
 		List<Employee> employeeList = employeeService.showList();
 		model.addAttribute("employeeList", employeeList);
-		return "/employee/list";
+		return "employee/list";
 	}
 
 	/**
